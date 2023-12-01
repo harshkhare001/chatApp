@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Playfair Display SC', serif;
+    font-family: 'Rowdies', sans-serif;
+  }
+  body{
+    background-image: url('../images/1.png');
+  }
+  h1 {
+    padding-top: 10px;
+    text-align: center;
+  }
+  input{
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 5px;
+    height:35px;
+    border: none;
+    padding:5px;
+  }
+  #container {
+    font-family: 'Playfair Display SC', serif;
+    font-family: 'Rowdies', sans-serif;
+    color: #ffffff;
+    padding: 10px;
+    margin: 2% 30%;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    border: 2px solid #ffffff;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.821);
+  }
+  #btn{
+    background-color: rgb(243, 139, 12);
+    cursor: pointer;
+  }

@@ -1,4 +1,4 @@
-const experss = require('express');
+const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -14,11 +14,15 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+const userRoute = require('./routes/user');
+
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags : 'a'})
 
 app.use(cors());
+app.use(userRoute);
 app.use(helmet());
 app.use(compression());
 app.use(morgan('combined', {stream : accessLogStream}));
 
-sequelize.sync().then((result)=>app.listen(3000)).catch((err)=>console.log(err));
+// sequelize.sync().then((result)=>app.listen(3000)).catch((err)=>console.log(err));
+app.listen(3000);

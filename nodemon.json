@@ -1,0 +1,15 @@
+{
+    "env":{
+        "RAZORPAY_KEY_ID" : "rzp_test_3EMdUaEXecM3FV",
+        "RAZORPAY_KEY_SECRET" : "vv4cPp48iIbn8sd0CXX9SbFS",
+        "EMAIL_SECRET_KEY" : "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",
+        "ACCESS_KEY" : "AKIAY4EGVRCY5OWTBF7P",
+        "SECRET_ACCESS_KEY" : "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",
+        "BUCKET_NAME" : "expensetracker2209",
+        "SECRET_KEY" : "kjhsgdfiuiew889kbasgdfskjabsdfjlabsbdljhsd",
+        "DATABASE_PASSWORD" : "hulk@123",
+        "DATABASE_USER" : "root",
+        "DATABASE_NAME" : "chat-app",
+        "DATABASE_HOST" : "localhost"
+    }
+}
