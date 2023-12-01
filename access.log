@@ -32,3 +32,4 @@
 ::1 - - [01/Dec/2023:11:50:20 +0000] "GET /js/signup.js HTTP/1.1" 404 151 "http://localhost:3000/signup" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 ::1 - - [01/Dec/2023:11:50:20 +0000] "GET /js/signup.js HTTP/1.1" 404 151 "http://localhost:3000/signup" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 ::1 - - [01/Dec/2023:11:51:01 +0000] "GET /js/signup.js HTTP/1.1" 404 151 "http://localhost:3000/signup" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+::1 - - [01/Dec/2023:12:32:14 +0000] "POST /signup HTTP/1.1" 404 146 "http://localhost:3000/signup" "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36"

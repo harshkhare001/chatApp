@@ -24,5 +24,5 @@ app.use(helmet());
 app.use(compression());
 app.use(morgan('combined', {stream : accessLogStream}));
 
-// sequelize.sync().then((result)=>app.listen(3000)).catch((err)=>console.log(err));
-app.listen(3000);
+sequelize.sync().then((result)=>app.listen(3000)).catch((err)=>console.log(err));
+//app.listen(3000);
