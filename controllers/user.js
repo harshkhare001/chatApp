@@ -1,10 +1,16 @@
 const path = require('path');
 const Users = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.getSignUpPage = (req, res, next)=>
 {
     res.sendFile(path.join(__dirname, "../", "public", "views", "signup.html"))
+}
+
+exports.getLoginPage = (req, res, next)=>
+{
+    res.sendFile(path.join(__dirname, "../", "public", "views", "login.html" ))
 }
 
 exports.addUser = async(req, res, next)=>

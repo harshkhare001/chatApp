@@ -8,6 +8,8 @@ router.use(express.static("public"));
 
 router.get('/signup', userController.getSignUpPage);
 
+router.get('/login', userController.getLoginPage);
+
 router.post('/signup', userController.addUser);
 
 module.exports = router;
