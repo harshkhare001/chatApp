@@ -9,19 +9,27 @@ const sequelize = require('./util/database');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 
+const User = require('./models/user');
+const forgotPasswordRequest = require('./models/forgotpasswordrequest');
+
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const userRoute = require('./routes/user');
+const forgotpasswordRoute = require('./routes/forgotpassword');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags : 'a'})
 
 app.use(cors());
 app.use(userRoute);
+app.use(forgotpasswordRoute);
 app.use(helmet());
 app.use(compression());
 app.use(morgan('combined', {stream : accessLogStream}));
+
+User.hasMany(forgotPasswordRequest);
+forgotPasswordRequest.belongsTo(User);
 
 sequelize.sync({force:false}).then((result)=>app.listen(3000)).catch((err)=>console.log(err));
