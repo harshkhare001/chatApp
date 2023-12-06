@@ -19,12 +19,14 @@ app.use(bodyParser.json());
 
 const userRoute = require('./routes/user');
 const forgotpasswordRoute = require('./routes/forgotpassword');
+const messagesRoute = require('./routes/messages');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags : 'a'})
 
 app.use(cors());
 app.use(userRoute);
 app.use(forgotpasswordRoute);
+app.use(messagesRoute);
 app.use(helmet());
 app.use(compression());
 app.use(morgan('combined', {stream : accessLogStream}));
