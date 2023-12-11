@@ -23,7 +23,9 @@ const messagesRoute = require('./routes/messages');
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags : 'a'})
 
-app.use(cors());
+app.use(cors({
+    origin : "*"
+}));
 app.use(userRoute);
 app.use(forgotpasswordRoute);
 app.use(messagesRoute);

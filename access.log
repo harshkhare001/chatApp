@@ -69,3 +69,4 @@
 ::1 - - [06/Dec/2023:11:05:46 +0000] "GET /dashboard HTTP/1.1" 404 148 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 ::1 - - [06/Dec/2023:11:05:51 +0000] "GET /dashboard HTTP/1.1" 404 148 "http://localhost:3000/login" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
 ::1 - - [06/Dec/2023:11:06:41 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:3000/dashboard" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
+::1 - - [10/Dec/2023:11:48:24 +0000] "GET /robots.txt HTTP/1.1" 404 149 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
