@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.get('/dashboard', messageController.getDashboardPage);
 
+router.post('/getmessage', messageController.getMessages);
+
 module.exports = router;
