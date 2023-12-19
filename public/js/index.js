@@ -1,5 +1,6 @@
 const form = document.getElementById('msg');
 form.addEventListener('submit', sendMessage);
+const list = document.getElementById('messages');
 
 async function sendMessage(e)
 {
@@ -15,7 +16,9 @@ async function sendMessage(e)
     try
     {
         const res = await axios.post("http://localhost:3000/getmessage", message);
-        console.log(res); 
+        console.log(res);
+        document.querySelector('#msg-text').value ='';
+        window.location.reload();
     }
     catch(err)
     {
@@ -31,4 +34,32 @@ function getTokenDetails(token)
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
     return JSON.parse(jsonPayload);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    renderMessages();
+  });
+
+async function renderMessages()
+{
+    try
+    {
+        const res = await axios.get("http://localhost:3000/fetchMessages");
+        printMessages(res.data)
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+function printMessages(messages)
+{
+    console.log(messages);
+    messages.forEach((message)=>{
+        var li = document.createElement('li');
+        li.className = 'messageList'
+        li.appendChild(document.createTextNode(`${message.sentBy} : ${message.text}`));
+        list.appendChild(li);
+    })
 }

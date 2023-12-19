@@ -18,6 +18,21 @@ exports.getMessages = async(req, res, next)=>
             text : req.body.message,
             sentBy : user.name
         })
+        res.status(201).json({message: "message sent successfully"});
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+exports.fetchMessages = async(req, res, next)=>
+{
+    try
+    {
+        const messages = await Message.findAll();
+        //console.log(messages);
+        res.status(201).json(messages);
     }
     catch(err)
     {

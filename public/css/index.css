@@ -62,3 +62,21 @@
   .send-msg button:hover{
     background-color: rgb(255, 72, 0);
   }
+
+  .messages{
+    color: white;
+    font-size: larger;
+    width: fit-content;
+    margin: 5px;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 10px;
+  }
+  
+ .messageList{
+  border: 2px solid White;
+  margin: 5px;
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 10px;
+ }

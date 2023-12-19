@@ -7,4 +7,6 @@ router.get('/dashboard', messageController.getDashboardPage);
 
 router.post('/getmessage', messageController.getMessages);
 
+router.get('/fetchMessages', messageController.fetchMessages);
+
 module.exports = router;
