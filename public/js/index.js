@@ -56,6 +56,7 @@ async function renderMessages()
 function printMessages(messages)
 {
     console.log(messages);
+    list.innerHTML=``;
     messages.forEach((message)=>{
         var li = document.createElement('li');
         li.className = 'messageList'
@@ -63,3 +64,5 @@ function printMessages(messages)
         list.appendChild(li);
     })
 }
+
+setInterval(renderMessages,1000);
