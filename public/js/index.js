@@ -16,7 +16,6 @@ async function sendMessage(e)
     try
     {
         const res = await axios.post("http://localhost:3000/getmessage", message);
-        console.log(res);
         document.querySelector('#msg-text').value ='';
         window.location.reload();
     }
@@ -44,8 +43,25 @@ async function renderMessages()
 {
     try
     {
-        const res = await axios.get("http://localhost:3000/fetchMessages");
-        printMessages(res.data)
+        const messagesInitially = localStorage.getItem('messages');
+        let lastMessageId=0;
+        if(messagesInitially === null)
+        {
+            const res = await axios.get(`http://localhost:3000/fetchMessages?lastMessageId=${lastMessageId}`);
+            console.log(res.data);
+            localStorage.setItem("messages", JSON.stringify(res.data));
+            printMessages();
+        }
+        else
+        {
+            const messagestoUpdate = JSON.parse(localStorage.getItem('messages'));
+            lastMessageId = messagestoUpdate[messagestoUpdate.length-1].id;
+            const res = await axios.get(`http://localhost:3000/fetchMessages?lastMessageId=${lastMessageId}`);
+            console.log(res.data);
+            const updatedMessages = messagestoUpdate.concat(res.data);
+            localStorage.setItem('messages', JSON.stringify(updatedMessages));
+            printMessages();
+        }
     }
     catch(err)
     {
@@ -53,9 +69,9 @@ async function renderMessages()
     }
 }
 
-function printMessages(messages)
+function printMessages()
 {
-    console.log(messages);
+    const messages = JSON.parse(localStorage.getItem("messages"));
     list.innerHTML=``;
     messages.forEach((message)=>{
         var li = document.createElement('li');

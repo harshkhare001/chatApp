@@ -27,12 +27,28 @@ exports.getMessages = async(req, res, next)=>
 }
 
 exports.fetchMessages = async(req, res, next)=>
-{
+{   
+    
     try
     {
+        const lastMessageId = +req.query.lastMessageId;
         const messages = await Message.findAll();
-        //console.log(messages);
-        res.status(201).json(messages);
+        let mes =[];
+
+        if(lastMessageId===0)
+        {
+            res.status(201).json(messages);
+        }
+        else
+        {
+            messages.forEach((message)=>{
+                if(message.id > lastMessageId)
+                {
+                    mes.push(message);
+                }
+            })
+            res.status(201).json(mes);
+        }
     }
     catch(err)
     {
