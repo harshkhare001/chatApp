@@ -20,13 +20,25 @@
 
   .msg-constainer
   {
-    width: 100%;
-    height: 680px;
+    width: 68%;
+    height: 600px;
     margin: 5px;
     border: 2px solid white;
     border-radius: 10px;
     overflow-y: scroll;
     overflow-anchor: auto;
+    float: right;
+  }
+
+  .group-container{
+    width: 30%;
+    height: 600px;
+    margin: 5px;
+    border: 2px solid white;
+    border-radius: 10px;
+    overflow-y: scroll;
+    overflow-anchor: auto;
+    float: left;
   }
 
   .msg{
@@ -79,7 +91,15 @@
     padding: 5px;
     border-radius: 10px;
   }
-  
+  #grouplist{
+    color: white;
+    font-size: larger;
+    width: 100%;
+    margin: 0px;
+    margin-left: 0px;
+    padding: 5px;
+    border-radius: 10px;
+  }
  .messageList{
   border: 2px solid White;
   margin: 5px;
@@ -87,3 +107,100 @@
   padding: 5px;
   border-radius: 10px;
  }
+
+ .groupList{
+  border: 2px solid White;
+  margin: 5px;
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 10px;
+ }
+
+ #header-img{
+  height:70px;
+  width:65px;
+  margin: 10px;
+  margin-left: 20px;
+}
+
+.header-1{
+  background-color: rgb(0,0,0,0.7);
+}
+
+#create-group{
+  float: right;
+  background-color: #f76521;
+  border:none;
+  border-radius: 5px;
+  padding: 5px;
+  color: white;
+  margin-left: 5px;
+  margin: 10px;
+}
+
+#logout{
+  float: right;
+  background-color: #f76521;
+  border:none;
+  border-radius: 5px;
+  padding: 5px;
+  color:white;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+
+
+
+
+.dropdown-check-list {
+  display: inline-block;
+}
+
+.dropdown-check-list .anchor {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 50px 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.dropdown-check-list .anchor:after {
+  position: absolute;
+  content: "";
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  padding: 5px;
+  right: 10px;
+  top: 20%;
+  -moz-transform: rotate(-135deg);
+  -ms-transform: rotate(-135deg);
+  -o-transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+
+.dropdown-check-list .anchor:active:after {
+  right: 8px;
+  top: 21%;
+}
+
+.dropdown-check-list ul.items {
+  padding: 2px;
+  display: none;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.dropdown-check-list ul.items li {
+  list-style: none;
+}
+
+.dropdown-check-list.visible .anchor {
+  color: #0094ff;
+}
+
+.dropdown-check-list.visible .items {
+  display: block;
+}

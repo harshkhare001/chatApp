@@ -16,7 +16,9 @@ exports.getMessages = async(req, res, next)=>
     {
         await Message.create({
             text : req.body.message,
-            sentBy : user.name
+            sentBy : user.name,
+            userId : user.id,
+            groupId : req.body.groupId
         })
         res.status(201).json({message: "message sent successfully"});
     }
@@ -32,7 +34,8 @@ exports.fetchMessages = async(req, res, next)=>
     try
     {
         const lastMessageId = +req.query.lastMessageId;
-        const messages = await Message.findAll();
+        const groupId = +req.query.groupId;
+        const messages = await Message.findAll({where : {groupId : groupId}});
         let mes =[];
 
         if(lastMessageId===0)

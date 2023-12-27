@@ -81,3 +81,11 @@ exports.login = async (req, res, next)=>
         console.log(err);
     }
 }
+
+
+exports.getAllUsers = async(req, res, next)=>
+{
+    const users = await Users.findAll();
+    //console.log(users);
+    res.status(201).json(users);
+}
