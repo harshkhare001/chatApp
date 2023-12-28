@@ -8,4 +8,14 @@ router.post('/addGroup', userAuthernticator.authenticate, groupController.addGro
 
 router.get('/getGroups', userAuthernticator.authenticate, groupController.getGroups);
 
+router.get('/getGroupMembers', groupController.getGroupMembers);
+
+router.get('/getGroupDetails', groupController.getGroupDetails);
+
+router.get('/removeUser', groupController.removeUser);
+
+router.get('/getGroupMembersToAdd', groupController.getGroupMembersToAdd);
+
+router.get('/addUserToGroup', groupController.addUser);
+
 module.exports = router;

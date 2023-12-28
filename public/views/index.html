@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +12,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC&family=Rowdies:wght@300&display=swap" rel="stylesheet">
 </head>
-<header class="header-1">
+<header class="header-1" style="color: white;">
     <img id="header-img" src="/images/logo2.png">
+    ChatApp
     <button id="logout">Logout</button>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@fat" id="create-group">Create Group</button>
 </header>
+
+<!-- adding group modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -51,10 +53,50 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
+<!-- end of create group modal -->
+
+<!-- Remove group members modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Remove Participants</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3"><p id="success"></p></div>
+                <ul class="list-group" id="participantsToRemove" style="list-style-type: none;">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of remove group member modal -->
+
+<!-- Start Add Participants modal -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Participants</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3"><p id="success"></p></div>
+                <ul class="list-group" id="participantsToAdd" style="list-style-type: none;">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End of Add PArticipants modal -->
+
 <body>
     <div class="container">
-        <div class="group-container">
+        <div class="group-container controls">
             <div class="groups">
                 <h1 class="chat-heading">Groups</h1>
                 <hr style="color: white;">
@@ -62,9 +104,20 @@
                 <ul class="groupslist" style="list-style-type: none;" id="grouplist"></ul>
             </div>
         </div>
-        <div class="msg-constainer">
+        <div class="msg-constainer controls">
             <div class="msg">
-                <h1 class="chat-heading">Chats</h1>
+                <!-- <h1 class="chat-heading">Chats</h1> -->
+                    <div id="groupName" style="float: left; width:55%; margin-top:15px; margin-left:10px;">
+                        <p style="color: white; font-size:larger;" id="groupNameFinal"></p>
+                    </div>
+                    <div style="float: right; width:40%; margin-top:15px; margin-right:10px;">
+                        <button id="addUserToGroup" style="visibility: hidden;" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@fat">Add Users</button>
+                        <button id="removeUser" style="visibility: hidden;" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-bs-whatever="@fat">Remove Users</button>
+                        <select name="groupMembers" id="groupMembers" style="float:right;">
+                            <option value="" disabled selected hidden>Participants</option>
+                        </select>
+                    </div>
+                <br><br>
                 <hr style="color: white;">
                 <br>
                 <ul class="messages" style="list-style-type: none;" id="messages"></ul>

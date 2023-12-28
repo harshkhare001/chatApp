@@ -23,7 +23,7 @@ exports.addUser = async(req, res, next)=>
     try
     {
         const {name, phone, email, password} = req.body;
-        console.log(req.body);
+        //console.log(req.body);
         const user = await Users.findByPk(email);
         if(user)
         {
@@ -47,7 +47,7 @@ exports.addUser = async(req, res, next)=>
 
 exports.login = async (req, res, next)=>
 {
-    console.log(req.body);
+    //console.log(req.body);
     const email = req.body.email;
     const password = req.body.password;
     try
@@ -85,7 +85,14 @@ exports.login = async (req, res, next)=>
 
 exports.getAllUsers = async(req, res, next)=>
 {
-    const users = await Users.findAll();
-    //console.log(users);
-    res.status(201).json(users);
+    try
+    {
+        const users = await Users.findAll();
+        //console.log(users);
+        res.status(201).json(users);
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 }

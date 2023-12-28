@@ -9,9 +9,8 @@ exports.getDashboardPage = (req, res, next)=>
 
 exports.getMessages = async(req, res, next)=>
 {
-    console.log(req.body);
     const user = await User.findByPk(req.body.user);
-    console.log(user.name);
+    //console.log(user.name);
     try
     {
         await Message.create({
@@ -35,6 +34,10 @@ exports.fetchMessages = async(req, res, next)=>
     {
         const lastMessageId = +req.query.lastMessageId;
         const groupId = +req.query.groupId;
+        if(isNaN(groupId))
+        {
+            return res.status(200).json({message:'select a group'});
+        }
         const messages = await Message.findAll({where : {groupId : groupId}});
         let mes =[];
 

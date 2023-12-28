@@ -19,7 +19,6 @@ async function sendMessage(e)
     {
         const res = await axios.post("http://localhost:3000/getmessage", message);
         document.querySelector('#msg-text').value ='';
-        window.location.reload();
     }
     catch(err)
     {
@@ -63,6 +62,7 @@ async function renderMessages()
             localStorage.setItem('messages', JSON.stringify(updatedMessages));
             printMessages();
         }
+        
     }
     catch(err)
     {
@@ -80,6 +80,7 @@ function printMessages()
         li.appendChild(document.createTextNode(`${message.sentBy} : ${message.text}`));
         list.appendChild(li);
     })
+    openGroupOnRefresh();
 }
 
 setInterval(renderMessages,1000);
@@ -128,6 +129,7 @@ async function getGroupDetails(e)
     }
     const res = await axios.post(`http://localhost:3000/addGroup`, data, { headers: {Authorization : token}});
     console.log(res);
+    window.location.reload();
 }
 
 async function getUserGroups()
@@ -139,18 +141,51 @@ async function getUserGroups()
 
 const groupList = document.getElementById('grouplist');
 
-groupList.addEventListener('click', (e)=>{
-    console.log(e.target.id)
+groupList.addEventListener('click', openGroup)
+
+
+async function openGroup(e)
+{   
+    document.getElementById('addUserToGroup').style.visibility = 'hidden';
+    document.getElementById('removeUser').style.visibility = 'hidden';
+    const groupid = e.target.id;
+    const res = await axios.get(`http://localhost:3000/getGroupDetails?groupId=${groupid}`);
+    document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
+    const token = localStorage.getItem('token');
+    const data = getTokenDetails(token);
+    if(data.userId === res.data.AdminId)
+    {
+        document.getElementById('addUserToGroup').style.visibility = 'visible';
+        document.getElementById('removeUser').style.visibility = 'visible';
+    } 
     localStorage.setItem('groupId', e.target.id);
     localStorage.removeItem('messages');
     renderMessages();
-})
+}
+
+async function openGroupOnRefresh(e)
+{   
+    const groupid = localStorage.getItem('groupId')
+    const res = await axios.get(`http://localhost:3000/getGroupDetails?groupId=${groupid}`);
+    document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
+    const token = localStorage.getItem('token');
+    const data = getTokenDetails(token);
+    if(data.userId === res.data.AdminId)
+    {
+        document.getElementById('addUserToGroup').style.visibility = 'visible';
+        document.getElementById('removeUser').style.visibility = 'visible';
+    } 
+}
 
 function displayGroups(groups)
 {
-    console.log(groups);
+    //console.log(groups);
     groups.groups.forEach((group)=>{
         var li = document.createElement('li');
+        var img = document.createElement('img');
+        img.src = "/images/avatar.jpg";
+        img.className = "listimage";
+        li.appendChild(img);
         li.appendChild(document.createTextNode(`${group.name}`));
         li.id = group.id;
         li.className = 'groupList';
@@ -166,3 +201,117 @@ checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
     checkList.classList.add('visible');
 }
 
+var getGroupMembers = document.getElementById('groupMembers');
+
+getGroupMembers.addEventListener('click',async (e)=>{
+    e.preventDefault();
+    getGroupMembers.innerHTML = ``;
+    getGroupMembers.innerHTML = `<option value="" disabled selected hidden>Participants</option>`;
+    const groupId = localStorage.getItem('groupId');
+    const res = await axios.get(`http://localhost:3000/getGroupMembers?groupId=${groupId}`);
+    const users = res.data;
+    var ul = document.createElement('ul');
+    users.forEach((user)=>{
+        var li = document.createElement('OPTION');
+        li.appendChild(document.createTextNode(`${user.name}`));
+        getGroupMembers.appendChild(li);
+    })
+})
+
+document.getElementById('logout').addEventListener('click', (e)=>{
+    e.preventDefault();
+    localStorage.removeItem('token');
+    localStorage.removeItem('messages');
+    localStorage.removeItem('groupId');
+    window.location.href = "login";
+})
+
+document.getElementById('removeUser').addEventListener('click', groupMembersForRemoval);
+
+async function groupMembersForRemoval()
+{
+    const groupId = localStorage.getItem('groupId');
+    const res = await axios.get(`http://localhost:3000/getGroupMembers?groupId=${groupId}`);
+    const users = res.data;
+    //console.log(users);
+    printOnModal(users);
+}
+
+const deletionList = document.getElementById('participantsToRemove');
+function printOnModal(users)
+{   
+    deletionList.innerHTML=``;
+    users.forEach((user)=>{
+        var li = document.createElement('li');
+        li.className = 'usersToDeleteList'
+        var deleteButton = document.createElement('button');
+        deleteButton.className = "delete btn btn-danger";
+        deleteButton.id = user.id;
+        deleteButton.appendChild(document.createTextNode("Remove"));
+        let span1 = document.createElement("span");
+        span1.textContent = `${user.name}  `;
+        span1.style.width = '60%';
+        li.appendChild(span1);
+        li.appendChild(deleteButton);
+        deletionList.appendChild(li);
+    })
+}
+
+deletionList.addEventListener('click', async function removeUser(e)
+{
+    e.preventDefault();
+    if (e.target.classList.contains("delete"))
+    {
+        var li = e.target.parentElement;
+        const userId = e.target.id;
+        const groupId = localStorage.getItem('groupId');
+        const res = await axios.get(`http://localhost:3000/removeUser?userId=${userId}&groupId=${groupId}`);
+        console.log(res.message);
+        deletionList.removeChild(li);
+    }
+})
+
+document.getElementById('addUserToGroup').addEventListener('click', groupMembersForAddition);
+
+async function groupMembersForAddition()
+{
+    const groupId = localStorage.getItem('groupId');
+    const res = await axios.get(`http://localhost:3000/getGroupMembersToAdd?groupId=${groupId}`);
+    const users = res.data;
+    //console.log(users);
+    printOnAddModal(users);
+}
+
+const additionList = document.getElementById('participantsToAdd');
+function printOnAddModal(users)
+{   
+    additionList.innerHTML=``;
+    users.forEach((user)=>{
+        var li = document.createElement('li');
+        li.className = 'usersToDeleteList'
+        var AddButton = document.createElement('button');
+        AddButton.className = "add btn btn-info";
+        AddButton.id = user.id;
+        AddButton.appendChild(document.createTextNode("Add"));
+        let span1 = document.createElement("span");
+        span1.textContent = `${user.name}  `;
+        span1.style.width = '60%';
+        li.appendChild(span1);
+        li.appendChild(AddButton);
+        additionList.appendChild(li);
+    })
+}
+
+additionList.addEventListener('click', async function add(e)
+{
+    e.preventDefault();
+    if (e.target.classList.contains("add"))
+    {
+        var li = e.target.parentElement;
+        const userId = e.target.id;
+        const groupId = localStorage.getItem('groupId');
+        const res = await axios.get(`http://localhost:3000/addUserToGroup?userId=${userId}&groupId=${groupId}`);
+        console.log(res.message);
+        additionList.removeChild(li);
+    }
+})

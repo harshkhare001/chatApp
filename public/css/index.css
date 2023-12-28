@@ -31,7 +31,7 @@
   }
 
   .group-container{
-    width: 30%;
+    width: 29%;
     height: 600px;
     margin: 5px;
     border: 2px solid white;
@@ -91,6 +91,7 @@
     padding: 5px;
     border-radius: 10px;
   }
+
   #grouplist{
     color: white;
     font-size: larger;
@@ -99,7 +100,9 @@
     margin-left: 0px;
     padding: 5px;
     border-radius: 10px;
+    cursor: pointer;
   }
+
  .messageList{
   border: 2px solid White;
   margin: 5px;
@@ -136,6 +139,7 @@
   color: white;
   margin-left: 5px;
   margin: 10px;
+  margin-top: 17px;
 }
 
 #logout{
@@ -147,6 +151,7 @@
   color:white;
   margin-top: 10px;
   margin-right: 10px;
+  margin-top: 17px;
 }
 
 
@@ -203,4 +208,55 @@
 
 .dropdown-check-list.visible .items {
   display: block;
+}
+
+.listimage{
+  border-radius: 50%;
+  height: 50px;
+  margin-right: 10px;
+  width : 60px;
+}
+
+#groupMembers{
+  margin-bottom: 10px;
+  margin-top: 0px;
+  float: auto;
+  margin-right: 10px;
+}
+
+#addUserToGroup{
+  background-color: #f76521;
+  border:none;
+  border-radius: 5px;
+  padding: 5px;
+  color:white;
+  margin-right: 10px;
+}
+
+#removeUser{
+  background-color: #f76521;
+  border:none;
+  border-radius: 5px;
+  padding: 5px;
+  color:white;
+}
+
+#groupMembers{
+  background-color: #f76521;
+  border:none;
+  border-radius: 5px;
+  padding: 5px;
+  color:white;
+}
+
+.delete{
+  float: inline-end;
+}
+
+.add{
+  float: inline-end;
+}
+
+.usersToDeleteList{
+  margin: 5px;
 }
