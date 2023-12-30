@@ -1,4 +1,5 @@
 const form  = document.getElementById('resetpasswordform');
+const url = 'http://localhost:3000';
 
 form.addEventListener('submit', async (e)=>{
     e.preventDefault();
@@ -18,7 +19,7 @@ form.addEventListener('submit', async (e)=>{
             password
         };
         try{
-            const res = await axios.post('http://localhost:3000/password/resetpassword',data);
+            const res = await axios.post(`${url}/password/resetpassword`,data);
             console.log(res);
             window.alert(res.data.message);
         }

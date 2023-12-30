@@ -1,4 +1,5 @@
 var form  = document.getElementById('signupForm');
+const url = 'http://localhost:3000';
 
 var name = document.querySelector('#name');
 var phone = document.querySelector('#phone');
@@ -22,7 +23,7 @@ async function signup(e){
     };
     try {
             let res;
-            res = await axios.post("http://localhost:3000/signup", user)
+            res = await axios.post(`${url}/signup`, user);
             console.log(res);
             
             const  p = document.createElement('p');

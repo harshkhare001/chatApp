@@ -1,4 +1,5 @@
 var form = document.getElementById('loginForm');
+const url = 'http://localhost:3000';
 
 form.addEventListener('submit', login);
 
@@ -13,7 +14,7 @@ async function login(e){
     };
     console.log(users);
     try{
-        const res = await axios.post("http://localhost:3000/login", users);
+        const res = await axios.post(`${url}/login`, users);
         console.log(res.data.message);
         if(res.data.message === 'Login Successful!')
         {

@@ -1,6 +1,7 @@
 const form = document.getElementById('msg');
 form.addEventListener('submit', sendMessage);
 const list = document.getElementById('messages');
+const url = 'http://localhost:3000';
 
 async function sendMessage(e)
 {
@@ -17,7 +18,7 @@ async function sendMessage(e)
     console.log(message);
     try
     {
-        const res = await axios.post("http://localhost:3000/getmessage", message);
+        const res = await axios.post(`${url}/getmessage`, message);
         document.querySelector('#msg-text').value ='';
     }
     catch(err)
@@ -49,7 +50,7 @@ async function renderMessages()
         let lastMessageId=0;
         if(messagesInitially === null)
         {
-            const res = await axios.get(`http://localhost:3000/fetchMessages?lastMessageId=${lastMessageId}&groupId=${groupId}`);
+            const res = await axios.get(`${url}/fetchMessages?lastMessageId=${lastMessageId}&groupId=${groupId}`);
             localStorage.setItem("messages", JSON.stringify(res.data));
             printMessages();
         }
@@ -57,7 +58,7 @@ async function renderMessages()
         {
             const messagestoUpdate = JSON.parse(localStorage.getItem('messages'));
             lastMessageId = messagestoUpdate[messagestoUpdate.length-1].id;
-            const res = await axios.get(`http://localhost:3000/fetchMessages?lastMessageId=${lastMessageId}&groupId=${groupId}`);
+            const res = await axios.get(`${url}/fetchMessages?lastMessageId=${lastMessageId}&groupId=${groupId}`);
             const updatedMessages = messagestoUpdate.concat(res.data);
             localStorage.setItem('messages', JSON.stringify(updatedMessages));
             printMessages();
@@ -88,7 +89,7 @@ getAllUsers();
 
 async function getAllUsers()
 {
-    const res = await axios.get(`http://localhost:3000/getAllUsers`);
+    const res = await axios.get(`${url}/getAllUsers`);
     //console.log(res.data);
     setUsers(res.data);
 }
@@ -127,7 +128,7 @@ async function getGroupDetails(e)
         name : groupName,
         memberIds : users
     }
-    const res = await axios.post(`http://localhost:3000/addGroup`, data, { headers: {Authorization : token}});
+    const res = await axios.post(`${url}/addGroup`, data, { headers: {Authorization : token}});
     console.log(res);
     window.location.reload();
 }
@@ -135,7 +136,7 @@ async function getGroupDetails(e)
 async function getUserGroups()
 {
     const token = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:3000/getGroups', { headers: {Authorization : token}});
+    const res = await axios.get(`${url}/getGroups`, { headers: {Authorization : token}});
     displayGroups(res.data);
 }
 
@@ -150,7 +151,7 @@ async function openGroup(e)
     document.getElementById('removeUser').style.visibility = 'hidden';
     document.getElementById('groupMembers').style.visibility = 'visible';
     const groupid = e.target.id;
-    const res = await axios.get(`http://localhost:3000/getGroupDetails?groupId=${groupid}`);
+    const res = await axios.get(`${url}/getGroupDetails?groupId=${groupid}`);
     document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
     const token = localStorage.getItem('token');
     const data = getTokenDetails(token);
@@ -168,7 +169,7 @@ async function openGroupOnRefresh(e)
 {   
     document.getElementById('groupMembers').style.visibility = 'visible';
     const groupid = localStorage.getItem('groupId')
-    const res = await axios.get(`http://localhost:3000/getGroupDetails?groupId=${groupid}`);
+    const res = await axios.get(`${url}/getGroupDetails?groupId=${groupid}`);
     document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
     const token = localStorage.getItem('token');
     const data = getTokenDetails(token);
@@ -210,7 +211,7 @@ getGroupMembers.addEventListener('click',async (e)=>{
     getGroupMembers.innerHTML = ``;
     getGroupMembers.innerHTML = `<option value="" disabled selected hidden>Participants</option>`;
     const groupId = localStorage.getItem('groupId');
-    const res = await axios.get(`http://localhost:3000/getGroupMembers?groupId=${groupId}`);
+    const res = await axios.get(`${url}/getGroupMembers?groupId=${groupId}`);
     const users = res.data;
     var ul = document.createElement('ul');
     users.forEach((user)=>{
@@ -233,7 +234,7 @@ document.getElementById('removeUser').addEventListener('click', groupMembersForR
 async function groupMembersForRemoval()
 {
     const groupId = localStorage.getItem('groupId');
-    const res = await axios.get(`http://localhost:3000/getGroupMembers?groupId=${groupId}`);
+    const res = await axios.get(`${url}/getGroupMembers?groupId=${groupId}`);
     const users = res.data;
     //console.log(users);
     printOnModal(users);
@@ -267,7 +268,7 @@ deletionList.addEventListener('click', async function removeUser(e)
         var li = e.target.parentElement;
         const userId = e.target.id;
         const groupId = localStorage.getItem('groupId');
-        const res = await axios.get(`http://localhost:3000/removeUser?userId=${userId}&groupId=${groupId}`);
+        const res = await axios.get(`${url}/removeUser?userId=${userId}&groupId=${groupId}`);
         console.log(res.message);
         deletionList.removeChild(li);
     }
@@ -278,7 +279,7 @@ document.getElementById('addUserToGroup').addEventListener('click', groupMembers
 async function groupMembersForAddition()
 {
     const groupId = localStorage.getItem('groupId');
-    const res = await axios.get(`http://localhost:3000/getGroupMembersToAdd?groupId=${groupId}`);
+    const res = await axios.get(`${url}/getGroupMembersToAdd?groupId=${groupId}`);
     const users = res.data;
     //console.log(users);
     printOnAddModal(users);
@@ -312,7 +313,7 @@ additionList.addEventListener('click', async function add(e)
         var li = e.target.parentElement;
         const userId = e.target.id;
         const groupId = localStorage.getItem('groupId');
-        const res = await axios.get(`http://localhost:3000/addUserToGroup?userId=${userId}&groupId=${groupId}`);
+        const res = await axios.get(`${url}/addUserToGroup?userId=${userId}&groupId=${groupId}`);
         console.log(res.message);
         additionList.removeChild(li);
     }
