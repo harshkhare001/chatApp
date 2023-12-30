@@ -148,6 +148,7 @@ async function openGroup(e)
 {   
     document.getElementById('addUserToGroup').style.visibility = 'hidden';
     document.getElementById('removeUser').style.visibility = 'hidden';
+    document.getElementById('groupMembers').style.visibility = 'visible';
     const groupid = e.target.id;
     const res = await axios.get(`http://localhost:3000/getGroupDetails?groupId=${groupid}`);
     document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
@@ -165,6 +166,7 @@ async function openGroup(e)
 
 async function openGroupOnRefresh(e)
 {   
+    document.getElementById('groupMembers').style.visibility = 'visible';
     const groupid = localStorage.getItem('groupId')
     const res = await axios.get(`http://localhost:3000/getGroupDetails?groupId=${groupid}`);
     document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
