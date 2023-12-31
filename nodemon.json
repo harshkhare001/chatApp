@@ -7,9 +7,9 @@
         "SECRET_ACCESS_KEY" : "bK/plyqYT9vYmKvMcQPVNYLuITQFU/eElYv+gqH/",
         "BUCKET_NAME" : "expensetracker2209",
         "SECRET_KEY" : "kjhsgdfiuiew889kbasgdfskjabsdfjlabsbdljhsd",
-        "DATABASE_PASSWORD" : "hulk@123",
-        "DATABASE_USER" : "root",
+        "DATABASE_PASSWORD" : "harsh123",
+        "DATABASE_USER" : "harsh",
         "DATABASE_NAME" : "chat-app",
-        "DATABASE_HOST" : "localhost"
+        "DATABASE_HOST" : "database-1.ceo8uaj0yirw.ap-south-1.rds.amazonaws.com"
     }
 }
