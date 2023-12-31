@@ -1,7 +1,7 @@
 const form = document.getElementById('msg');
 form.addEventListener('submit', sendMessage);
 const list = document.getElementById('messages');
-const url = 'http://localhost:3000';
+const url = 'http://43.204.215.81:3000';
 
 async function sendMessage(e)
 {
