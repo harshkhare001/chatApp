@@ -31,7 +31,7 @@ async function login(e){
         }
         else
         {
-            alert('User does not exist');
+            alert('User does not exist!');
         }
 
     }
