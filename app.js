@@ -1,3 +1,6 @@
+const {createServer} = require('http');
+const {Server} = require('socket.io');
+const {instrument} = require('@socket.io/admin-ui');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -14,6 +17,8 @@ const forgotPasswordRequest = require('./models/forgotpasswordrequest');
 const Messages = require('./models/message');
 const Groups = require('./models/groups');
 const GroupMembers = require('./models/group-members');
+
+const webSocketServices = require('./services/websocket');
 
 const app = express();
 
@@ -36,6 +41,14 @@ app.use(helmet());
 app.use(compression());
 app.use(morgan('combined', {stream : accessLogStream}));
 
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+    origin: ["https://admin.socket.io",],
+    credentials: true
+});
+io.on('connection', webSocketServices);
+instrument(io, {auth : false});
+
 User.hasMany(forgotPasswordRequest);
 forgotPasswordRequest.belongsTo(User);
 
@@ -49,4 +62,19 @@ Groups.belongsTo(User, {foreignKey: 'AdminId', constraints:true, onDelete:'CASCA
 Groups.hasMany(Messages);
 Messages.belongsTo(Groups);
 
-sequelize.sync({force:false}).then((result)=>app.listen(3000)).catch((err)=>console.log(err));
+// sequelize.sync({force:false}).then((result)=>app.listen(3000)).catch((err)=>console.log(err));
+
+async function initiate()
+{
+    try
+    {
+        const res = await sequelize.sync();
+        httpServer.listen(3000)
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+initiate();

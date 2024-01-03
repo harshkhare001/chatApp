@@ -1,7 +1,20 @@
+const socket = io(window.location.origin);
+
 const form = document.getElementById('msg');
 form.addEventListener('submit', sendMessage);
 const list = document.getElementById('messages');
 const url = 'http://localhost:3000';
+
+
+
+socket.on('group-message', (groupId)=>
+{
+    const groupid = localStorage.getItem('groupId');
+    if(groupId === groupId)
+    {
+        renderMessages();
+    }
+})
 
 async function sendMessage(e)
 {
@@ -20,6 +33,9 @@ async function sendMessage(e)
     {
         const res = await axios.post(`${url}/getmessage`, message);
         document.querySelector('#msg-text').value ='';
+
+        socket.emit('new-group-message', groupId);
+        renderMessages();
     }
     catch(err)
     {
@@ -84,7 +100,7 @@ function printMessages()
     openGroupOnRefresh();
 }
 
-setInterval(renderMessages,1000);
+//setInterval(renderMessages,1000);
 getAllUsers();
 
 async function getAllUsers()
