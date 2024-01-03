@@ -1,5 +1,5 @@
 const form  = document.getElementById('resetpasswordform');
-const url = 'http://localhost:3000';
+const url = 'http://43.204.215.81:3000';
 
 form.addEventListener('submit', async (e)=>{
     e.preventDefault();
