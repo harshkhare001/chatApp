@@ -1,4 +1,4 @@
-const Group = require('../models/groups');
+const Group = require('../models/group');
 const User = require('../models/user');
 
 exports.addGroup = async(req, res, next)=>
@@ -51,7 +51,7 @@ exports.getGroupMembers = async (req, res, next)=>
 {
     try
     {
-        const groupId = +req.query.groupId;
+        const groupId = +req.params['groupId'];
         const group = await Group.findByPk(groupId);
         const users = await group.getUsers();
         res.status(201).json(users);
@@ -67,7 +67,7 @@ exports.getGroupDetails = async(req, res, next)=>
 {
     try
     {
-        const groupId = +req.query.groupId;
+        const groupId = +req.params['groupId'];
         const group = await Group.findByPk(groupId);
         res.status(201).json(group);
     }
@@ -82,7 +82,7 @@ exports.removeUser = async(req, res, next)=>
     try
     {
         const userId = req.query.userId;
-        const groupId = +req.query.groupId;
+        const groupId = +req.params['groupId'];
         console.log(userId, groupId);
         const group = await Group.findByPk(groupId);
         const response = await group.removeUser(userId);
@@ -94,14 +94,13 @@ exports.removeUser = async(req, res, next)=>
     }
 }
 
-//let difference = arr1.filter(x=>!arr2.includes(x));
 
 exports.getGroupMembersToAdd = async(req, res, next)=>
 {
     try
     {
         const arr1 = await User.findAll();
-        const groupId = +req.query.groupId;
+        const groupId = +req.params['groupId'];
         const group = await Group.findByPk(groupId);
         const arr2 = await group.getUsers();
         let usersToAdd = getDifference(arr1,arr2);
@@ -127,8 +126,8 @@ exports.addUser = async(req, res, next)=>
     try
     {
         const userId = req.query.userId;
-        const groupId = +req.query.groupId;
-        console.log(userId, groupId);
+        const groupId = +req.params['groupId'];
+        //console.log(userId, groupId);
         const group = await Group.findByPk(groupId);
         const data = await group.addUser(userId);
         res.status(201).json({message:'user added', data});

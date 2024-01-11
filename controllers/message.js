@@ -1,6 +1,8 @@
 const path = require('path');
 const User = require('../models/user');
 const Message = require('../models/message');
+const awsServices = require('../services/s3services');
+const { JSON } = require('sequelize');
 
 exports.getDashboardPage = (req, res, next)=>
 {
@@ -33,7 +35,8 @@ exports.fetchMessages = async(req, res, next)=>
     try
     {
         const lastMessageId = +req.query.lastMessageId;
-        const groupId = +req.query.groupId;
+        const groupId = req.params['groupId'];
+        console.log(groupId);
         if(isNaN(groupId))
         {
             return res.status(200).json({message:'select a group'});
@@ -55,6 +58,34 @@ exports.fetchMessages = async(req, res, next)=>
             })
             res.status(201).json(mes);
         }
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+
+exports.saveImages = async (req, res, next)=>
+{
+    const image = req.file;
+    const groupId = req.body.groupId; 
+    const userId = req.body.user;
+    const fileName = `chat-images/group${groupId}/userId/${Date.now()}_${image.originalname}`;
+    const imageUrl = await awsServices.uploadToS3(image.buffer, fileName);
+    //console.log(imageUrl);
+
+    const user = await User.findByPk(userId);
+
+    try
+    {
+        await Message.create({
+            text : imageUrl,
+            sentBy : user.name,
+            userId : user.id,
+            groupId : groupId,
+            isImage : true
+        })
+        res.status(201).json({message: "message sent successfully"});
     }
     catch(err)
     {

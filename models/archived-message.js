@@ -1,7 +1,7 @@
 const sequelize = require('../util/database');
 const Sequelize = require('sequelize');
 
-const Messages = sequelize.define("messages",{
+const archivedMessages = sequelize.define("archivedmessages",{
     id : {
         type : Sequelize.INTEGER,
         autoIncrement : true,
@@ -23,4 +23,4 @@ const Messages = sequelize.define("messages",{
 
 })
 
-module.exports = Messages;
+module.exports = archivedMessages;

@@ -1,5 +1,5 @@
 var form = document.getElementById('loginForm');
-const url = 'http://43.204.215.81:3000';
+const url = 'http://localhost:3000';
 
 form.addEventListener('submit', login);
 

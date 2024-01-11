@@ -3,14 +3,14 @@ const socket = io(window.location.origin);
 const form = document.getElementById('msg');
 form.addEventListener('submit', sendMessage);
 const list = document.getElementById('messages');
-const url = 'http://43.204.215.81:3000';
+const url = 'http://localhost:3000';
 
 
 
 socket.on('group-message', (groupId)=>
 {
     const groupid = localStorage.getItem('groupId');
-    if(groupId === groupId)
+    if(groupId === groupid)
     {
         renderMessages();
     }
@@ -23,17 +23,29 @@ async function sendMessage(e)
     const token = localStorage.getItem('token');
     const tokenDetails = getTokenDetails(token);
     const groupId = localStorage.getItem('groupId');
-    const message = {
-        message : text,
-        user : tokenDetails.userId,
-        groupId : groupId
-    }
-    console.log(message);
+    const file = document.getElementById('multimedia').files[0];
+   
     try
     {
-        const res = await axios.post(`${url}/getmessage`, message);
-        document.querySelector('#msg-text').value ='';
-
+        if(text === '')
+        {
+            console.log(file);
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('user', tokenDetails.userId);
+            formData.append('groupId', groupId);
+            await axios.post(`${url}/message/image`, formData);
+        }
+        else
+        {
+            const message = {
+                message : text,
+                user : tokenDetails.userId,
+                groupId : groupId
+            }
+            await axios.post(`${url}/message/textMessage`, message);
+            document.querySelector('#msg-text').value ='';
+        }
         socket.emit('new-group-message', groupId);
         renderMessages();
     }
@@ -66,7 +78,7 @@ async function renderMessages()
         let lastMessageId=0;
         if(messagesInitially === null)
         {
-            const res = await axios.get(`${url}/fetchMessages?lastMessageId=${lastMessageId}&groupId=${groupId}`);
+            const res = await axios.get(`${url}/message/${groupId}?lastMessageId=${lastMessageId}`);//&groupId=${groupId}
             localStorage.setItem("messages", JSON.stringify(res.data));
             printMessages();
         }
@@ -74,7 +86,7 @@ async function renderMessages()
         {
             const messagestoUpdate = JSON.parse(localStorage.getItem('messages'));
             lastMessageId = messagestoUpdate[messagestoUpdate.length-1].id;
-            const res = await axios.get(`${url}/fetchMessages?lastMessageId=${lastMessageId}&groupId=${groupId}`);
+            const res = await axios.get(`${url}/message/${groupId}?lastMessageId=${lastMessageId}`);//&groupId=${groupId}
             const updatedMessages = messagestoUpdate.concat(res.data);
             localStorage.setItem('messages', JSON.stringify(updatedMessages));
             printMessages();
@@ -92,15 +104,34 @@ function printMessages()
     const messages = JSON.parse(localStorage.getItem("messages"));
     list.innerHTML=``;
     messages.forEach((message)=>{
-        var li = document.createElement('li');
-        li.className = 'messageList'
-        li.appendChild(document.createTextNode(`${message.sentBy} : ${message.text}`));
-        list.appendChild(li);
+
+        if(message.isImage)
+        {
+            var li = document.createElement('li');
+            li.className = 'messageList'
+            li.appendChild(document.createTextNode(`${message.sentBy} : `))
+            const br = document.createElement('br');
+            li.appendChild(br);
+            const div = document.createElement('div');
+            div.innerHTML = `
+            <a href="${message.text}" target="_blank">
+            <img src="${message.text}" class="chatImage">
+            </a>`
+            li.appendChild(div);
+            list.appendChild(li);
+        }
+        else
+        {
+            var li = document.createElement('li');
+            li.className = 'messageList'
+            li.appendChild(document.createTextNode(`${message.sentBy} : ${message.text}`));
+            list.appendChild(li);
+        }
+        
     })
     openGroupOnRefresh();
 }
 
-//setInterval(renderMessages,1000);
 getAllUsers();
 
 async function getAllUsers()
@@ -112,16 +143,23 @@ async function getAllUsers()
 const userList = document.getElementById('participants');
 function setUsers(users)
 {
+    const token = localStorage.getItem('token');
+    const tokenDetails = getTokenDetails(token);
+    const currentUserId = tokenDetails.userId;
     users.forEach((user)=>{
-        var li = document.createElement('li');
-        var input = document.createElement('input');
-        input.setAttribute("type", "checkbox");
-        input.value = user.id;
-        input.name = 'user';
-        li.appendChild(input);
-        li.id = user.id;
-        li.appendChild(document.createTextNode(`${user.name}`));
-        userList.appendChild(li);
+        if(user.id != currentUserId)
+        {
+            var li = document.createElement('li');
+            var input = document.createElement('input');
+            input.setAttribute("type", "checkbox");
+            input.value = user.id;
+            input.name = 'user';
+            li.appendChild(input);
+            li.id = user.id;
+            li.appendChild(document.createTextNode(`${user.name}`));
+            userList.appendChild(li);
+        }
+        
     })
 }
 
@@ -144,7 +182,7 @@ async function getGroupDetails(e)
         name : groupName,
         memberIds : users
     }
-    const res = await axios.post(`${url}/addGroup`, data, { headers: {Authorization : token}});
+    const res = await axios.post(`${url}/group`, data, { headers: {Authorization : token}});
     console.log(res);
     window.location.reload();
 }
@@ -152,7 +190,7 @@ async function getGroupDetails(e)
 async function getUserGroups()
 {
     const token = localStorage.getItem('token');
-    const res = await axios.get(`${url}/getGroups`, { headers: {Authorization : token}});
+    const res = await axios.get(`${url}/group`, { headers: {Authorization : token}});
     displayGroups(res.data);
 }
 
@@ -166,8 +204,8 @@ async function openGroup(e)
     document.getElementById('addUserToGroup').style.visibility = 'hidden';
     document.getElementById('removeUser').style.visibility = 'hidden';
     document.getElementById('groupMembers').style.visibility = 'visible';
-    const groupid = e.target.id;
-    const res = await axios.get(`${url}/getGroupDetails?groupId=${groupid}`);
+    const groupId = e.target.id;
+    const res = await axios.get(`${url}/group/${groupId}/details`);
     document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
     const token = localStorage.getItem('token');
     const data = getTokenDetails(token);
@@ -184,8 +222,8 @@ async function openGroup(e)
 async function openGroupOnRefresh(e)
 {   
     document.getElementById('groupMembers').style.visibility = 'visible';
-    const groupid = localStorage.getItem('groupId')
-    const res = await axios.get(`${url}/getGroupDetails?groupId=${groupid}`);
+    const groupId = localStorage.getItem('groupId')
+    const res = await axios.get(`${url}/group/${groupId}/details`);
     document.getElementById('groupNameFinal').innerHTML=`${res.data.name}`;
     const token = localStorage.getItem('token');
     const data = getTokenDetails(token);
@@ -227,7 +265,7 @@ getGroupMembers.addEventListener('click',async (e)=>{
     getGroupMembers.innerHTML = ``;
     getGroupMembers.innerHTML = `<option value="" disabled selected hidden>Participants</option>`;
     const groupId = localStorage.getItem('groupId');
-    const res = await axios.get(`${url}/getGroupMembers?groupId=${groupId}`);
+    const res = await axios.get(`${url}/group/${groupId}/members`);
     const users = res.data;
     var ul = document.createElement('ul');
     users.forEach((user)=>{
@@ -250,7 +288,7 @@ document.getElementById('removeUser').addEventListener('click', groupMembersForR
 async function groupMembersForRemoval()
 {
     const groupId = localStorage.getItem('groupId');
-    const res = await axios.get(`${url}/getGroupMembers?groupId=${groupId}`);
+    const res = await axios.get(`${url}/group/${groupId}/members`);
     const users = res.data;
     //console.log(users);
     printOnModal(users);
@@ -260,19 +298,25 @@ const deletionList = document.getElementById('participantsToRemove');
 function printOnModal(users)
 {   
     deletionList.innerHTML=``;
+    const token = localStorage.getItem('token');
+    const tokenDetails = getTokenDetails(token);
+    const currentUserId = tokenDetails.userId;
     users.forEach((user)=>{
-        var li = document.createElement('li');
-        li.className = 'usersToDeleteList'
-        var deleteButton = document.createElement('button');
-        deleteButton.className = "delete btn btn-danger";
-        deleteButton.id = user.id;
-        deleteButton.appendChild(document.createTextNode("Remove"));
-        let span1 = document.createElement("span");
-        span1.textContent = `${user.name}  `;
-        span1.style.width = '60%';
-        li.appendChild(span1);
-        li.appendChild(deleteButton);
-        deletionList.appendChild(li);
+        if(user.id != currentUserId)
+        {
+            var li = document.createElement('li');
+            li.className = 'usersToDeleteList'
+            var deleteButton = document.createElement('button');
+            deleteButton.className = "delete btn btn-danger";
+            deleteButton.id = user.id;
+            deleteButton.appendChild(document.createTextNode("Remove"));
+            let span1 = document.createElement("span");
+            span1.textContent = `${user.name}  `;
+            span1.style.width = '60%';
+            li.appendChild(span1);
+            li.appendChild(deleteButton);
+            deletionList.appendChild(li);
+        }
     })
 }
 
@@ -284,7 +328,7 @@ deletionList.addEventListener('click', async function removeUser(e)
         var li = e.target.parentElement;
         const userId = e.target.id;
         const groupId = localStorage.getItem('groupId');
-        const res = await axios.get(`${url}/removeUser?userId=${userId}&groupId=${groupId}`);
+        const res = await axios.get(`${url}/group/${groupId}/removeUser?userId=${userId}`);
         console.log(res.message);
         deletionList.removeChild(li);
     }
@@ -295,9 +339,8 @@ document.getElementById('addUserToGroup').addEventListener('click', groupMembers
 async function groupMembersForAddition()
 {
     const groupId = localStorage.getItem('groupId');
-    const res = await axios.get(`${url}/getGroupMembersToAdd?groupId=${groupId}`);
+    const res = await axios.get(`${url}/group/${groupId}/usersToAdd`);
     const users = res.data;
-    //console.log(users);
     printOnAddModal(users);
 }
 
@@ -329,7 +372,7 @@ additionList.addEventListener('click', async function add(e)
         var li = e.target.parentElement;
         const userId = e.target.id;
         const groupId = localStorage.getItem('groupId');
-        const res = await axios.get(`${url}/addUserToGroup?userId=${userId}&groupId=${groupId}`);
+        const res = await axios.get(`${url}/group/${groupId}/addUser?userId=${userId}`);
         console.log(res.message);
         additionList.removeChild(li);
     }

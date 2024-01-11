@@ -1,7 +1,7 @@
 const path = require('path');
 const Sib = require('sib-api-v3-sdk');
 const User = require('../models/user');
-const FPR = require('../models/forgotpasswordrequest');
+const FPR = require('../models/forgot-password');
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require('bcrypt');
 

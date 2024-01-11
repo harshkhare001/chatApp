@@ -260,3 +260,8 @@
 .usersToDeleteList{
   margin: 5px;
 }
+
+.chatImage{
+  width: 100px;
+  height: 120px;
+}

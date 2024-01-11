@@ -1,5 +1,5 @@
 var form = document.getElementById('forgotpasswordform');
-const url = 'http://43.204.215.81:3000';
+const url = 'http://localhost:3000';
 
 var email = document.querySelector("#email");
 
